@@ -1,11 +1,13 @@
 package com.tuorjp.financial_helper.models;
 
+import com.tuorjp.financial_helper.enums.CategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -20,4 +22,12 @@ public class Category {
 
     @Column(nullable = false)
     private Integer type;
+
+    @PrePersist
+    @PreUpdate
+    private void validateType() {
+        if(!CategoryType.isValidType(this.type)) {
+            throw new IllegalArgumentException("Invalid category type " + this.type);
+        }
+    }
 }
