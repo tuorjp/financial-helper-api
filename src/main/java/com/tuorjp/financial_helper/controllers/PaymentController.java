@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,24 @@ public class PaymentController {
         List<PaymentDTO> payments;
         try {
             payments = paymentService.findPaymentBetweenValues(initValue, endValue);
+            return ResponseEntity.ok(payments);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving payments: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/v1/payment")
+    public ResponseEntity<?> getPaymentsWithinDates(
+            @RequestParam(name = "init-date") LocalDate initDate,
+            @RequestParam(name = "end-date") LocalDate endDate
+    ) {
+        if (initDate == null || endDate == null) {
+            return ResponseEntity.badRequest().body("init-date and end-date cannot be null or empty.");
+        }
+
+        List<PaymentDTO> payments;
+        try {
+            payments = paymentService.findPaymentsWithinDates(initDate, endDate);
             return ResponseEntity.ok(payments);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving payments: " + e.getMessage());
