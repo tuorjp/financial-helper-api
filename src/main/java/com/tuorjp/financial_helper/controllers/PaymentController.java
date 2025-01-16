@@ -75,7 +75,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/v1/payment")
+    @GetMapping("/v1/payment-by-date")
     public ResponseEntity<?> getPaymentsWithinDates(
             @RequestParam(name = "init-date") LocalDate initDate,
             @RequestParam(name = "end-date") LocalDate endDate
