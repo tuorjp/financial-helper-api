@@ -1,49 +1,71 @@
 package com.tuorjp.financial_helper.services;
 
+import com.tuorjp.financial_helper.dto.PaymentDTO;
+import com.tuorjp.financial_helper.models.Category;
 import com.tuorjp.financial_helper.models.Payment;
-import com.tuorjp.financial_helper.models.User;
 import com.tuorjp.financial_helper.repositories.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public Payment createPayment(Payment payment) {
         return paymentRepository.save(payment);
     }
 
-    public List<Payment> findPaymentsWithinDates(LocalDate startDate, LocalDate endDate) {
-        return paymentRepository.findByDateBetween(startDate, endDate, this.getCurrentUserId());
+    public List<PaymentDTO> findPaymentsWithinDates(LocalDate startDate, LocalDate endDate) {
+        List<Payment> payments = paymentRepository.findByDateBetween(startDate, endDate, userService.getCurrentUser());
+
+        return payments
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Payment> findPaymentsByCategory(int paymentCategory) {
-        return paymentRepository.findByCategory(paymentCategory, this.getCurrentUserId());
+    public List<PaymentDTO> findPaymentsByCategory(int paymentCategory) {
+        Category category = categoryService.findById(paymentCategory);
+        List<Payment> payments = paymentRepository.findByCategory(category, userService.getCurrentUser());
+
+        return payments
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Payment> findPaymentBetweenValues(float startValue, float endValue) {
-        int currentUserId = this.getCurrentUserId();
+    public List<PaymentDTO> findPaymentBetweenValues(float startValue, float endValue) {
+        List<Payment> payments;
 
-        return paymentRepository.findByPaymentValueBetween(startValue, endValue, currentUserId);
+        payments = paymentRepository.findByPaymentValueBetween(startValue, endValue, userService.getCurrentUser());
+
+        return payments
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    private Integer getCurrentUserId(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        return user.getId();
-    }
-
-    private User getCurrentUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (User) authentication.getPrincipal();
+    private PaymentDTO convertToDTO(Payment payment) {
+        PaymentDTO dto = new PaymentDTO();
+        dto.setPaymentDate(payment.getPaymentDate());
+        dto.setPaymentValue(payment.getPaymentValue());
+        dto.setCategory(payment.getCategory().getId());
+        dto.setUser(payment.getUser().getId());
+        return dto;
     }
 }
