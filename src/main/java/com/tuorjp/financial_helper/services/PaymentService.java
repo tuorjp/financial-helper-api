@@ -19,10 +19,6 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
 
     public Payment createPayment(Payment payment) {
-        User currentUser = this.getCurrentUser();
-
-        payment.setUser(currentUser);
-
         return paymentRepository.save(payment);
     }
 

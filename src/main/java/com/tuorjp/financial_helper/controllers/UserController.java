@@ -3,7 +3,6 @@ package com.tuorjp.financial_helper.controllers;
 import com.tuorjp.financial_helper.dto.UserDTO;
 import com.tuorjp.financial_helper.dto.UserMapper;
 import com.tuorjp.financial_helper.exception.DuplicatedTupleException;
-import com.tuorjp.financial_helper.models.User;
 import com.tuorjp.financial_helper.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

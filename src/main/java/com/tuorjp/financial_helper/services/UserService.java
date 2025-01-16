@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -36,5 +37,10 @@ public class UserService {
         String rawPassword = user.getPassword();
         String encryptedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encryptedPassword);
+    }
+
+    public User findById(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found with ID " + id));
     }
 }
