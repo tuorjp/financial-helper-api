@@ -36,7 +36,7 @@ public class ReceiptService {
 
     public List<Receipt> findReceiptsBetweenValues(float startValue, float endValue) {
         int currentUserId = this.getCurrentUserId();
-        return receiptRepository.findByValueBetween(startValue, endValue, currentUserId);
+        return receiptRepository.findByPaymentValueBetween(startValue, endValue, currentUserId);
     }
 
     private Integer getCurrentUserId(){

@@ -11,12 +11,12 @@ import java.util.List;
 public interface ReceiptRepository extends JpaRepository<Receipt, Integer> {
     Receipt save(Receipt receipt);
 
-    @Query("SELECT r FROM receipt r WHERE r.receipt_date BETWEEN :startDate AND :endDate AND r.user_id = :userId")
+    @Query("SELECT r FROM Receipt r WHERE r.receiptDate BETWEEN :startDate AND :endDate AND r.user = :userId")
     List<Receipt> findByDateBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("userId") int userId);
 
-    @Query("SELECT r FROM receipt r WHERE r.receipt_category = :receiptCategory AND r.user_id = :userId")
+    @Query("SELECT r FROM Receipt r WHERE r.category = :receiptCategory AND r.user = :userId")
     List<Receipt> findByCategory(@Param("receiptCategory") int categoryId, @Param("userId") int userId);
 
-    @Query("SELECT r FROM receipt r WHERE r.receipt_value >= :startValue AND r.receipt_value <= :endValue AND r.user_id = :userId")
-    List<Receipt> findByValueBetween(@Param("startValue") float startValue, @Param("endValue") float endValue, @Param("userId") int userId);
+    @Query("SELECT r FROM Receipt r WHERE r.receiptValue >= :startValue AND r.receiptValue <= :endValue AND r.user = :userId")
+    List<Receipt> findByPaymentValueBetween(@Param("startValue") float startValue, @Param("endValue") float endValue, @Param("userId") int userId);
 }

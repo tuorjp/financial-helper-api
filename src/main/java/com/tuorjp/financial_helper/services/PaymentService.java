@@ -37,7 +37,7 @@ public class PaymentService {
     public List<Payment> findPaymentBetweenValues(float startValue, float endValue) {
         int currentUserId = this.getCurrentUserId();
 
-        return paymentRepository.findByValueBetween(startValue, endValue, currentUserId);
+        return paymentRepository.findByPaymentValueBetween(startValue, endValue, currentUserId);
     }
 
     private Integer getCurrentUserId(){
