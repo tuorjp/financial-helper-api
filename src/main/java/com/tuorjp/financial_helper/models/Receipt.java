@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
