@@ -46,4 +46,8 @@ public class CategoryService {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Category not found with ID " + id));
     }
+
+    public List<Category> findAllCategories() {
+        return categoryRepository.findAll();
+    }
 }

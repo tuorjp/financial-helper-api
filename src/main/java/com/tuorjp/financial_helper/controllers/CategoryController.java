@@ -33,6 +33,16 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("/v1/category")
+    public ResponseEntity<?> getAllCategories() {
+        List<Category> categories = categoryService.findAllCategories();
+        if (categories.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(categories);
+    }
+
     @GetMapping("/v1/category/{type}")
     public ResponseEntity<?> getCategoriesByType(@PathVariable String type) {
         try {
