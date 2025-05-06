@@ -16,11 +16,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ReceiptService {
-    @Autowired
-    ReceiptRepository receiptRepository;
-
-    @Autowired
-    UserService userService;
+    private final ReceiptRepository receiptRepository;
+    private final UserService userService;
 
     public Receipt createReceipt(Receipt receipt) {
         return receiptRepository.save(receipt);

@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-
     private final UserService userService;
-
     private final CategoryService categoryService;
 
     public Payment createPayment(Payment payment) {

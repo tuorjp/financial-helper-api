@@ -9,7 +9,6 @@ import com.tuorjp.financial_helper.services.CategoryService;
 import com.tuorjp.financial_helper.services.ReceiptService;
 import com.tuorjp.financial_helper.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,16 +21,9 @@ import java.util.NoSuchElementException;
 @RestController
 @RequiredArgsConstructor
 public class ReceiptController {
-    @Autowired
     private final ReceiptService receiptService;
-
-    @Autowired
     private final CategoryService categoryService;
-
-    @Autowired
     private final UserService userService;
-
-    @Autowired
     private final ReceiptMapper receiptMapper;
 
     @PostMapping("/v1/receipt")

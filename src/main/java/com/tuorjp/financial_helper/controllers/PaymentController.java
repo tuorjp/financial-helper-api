@@ -9,7 +9,6 @@ import com.tuorjp.financial_helper.services.CategoryService;
 import com.tuorjp.financial_helper.services.PaymentService;
 import com.tuorjp.financial_helper.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +22,9 @@ import java.util.NoSuchElementException;
 @RestController
 @RequiredArgsConstructor
 public class PaymentController {
-    @Autowired
     private final PaymentService paymentService;
-
-    @Autowired
     private final CategoryService categoryService;
-
-    @Autowired
     private final UserService userService;
-
-    @Autowired
     private final PaymentMapper paymentMapper;
 
     @PostMapping("/v1/payment")
