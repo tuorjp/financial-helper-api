@@ -35,7 +35,7 @@ public class CategoryService {
 
         var existentCategory = categoryRepository.findByName(category.getName());
 
-        if (existentCategory != null) {
+        if (existentCategory.isPresent()) {
             throw new DuplicatedTupleException("Category already exists");
         }
 

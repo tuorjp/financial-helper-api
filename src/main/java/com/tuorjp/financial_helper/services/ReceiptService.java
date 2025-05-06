@@ -1,8 +1,6 @@
 package com.tuorjp.financial_helper.services;
 
-import com.tuorjp.financial_helper.dto.PaymentDTO;
 import com.tuorjp.financial_helper.dto.ReceiptDTO;
-import com.tuorjp.financial_helper.models.Payment;
 import com.tuorjp.financial_helper.models.Receipt;
 import com.tuorjp.financial_helper.repositories.ReceiptRepository;
 import lombok.RequiredArgsConstructor;
