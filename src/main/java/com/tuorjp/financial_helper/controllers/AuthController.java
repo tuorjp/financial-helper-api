@@ -1,5 +1,6 @@
 package com.tuorjp.financial_helper.controllers;
 
+import com.tuorjp.financial_helper.dto.AuthenticationDTO;
 import com.tuorjp.financial_helper.dto.UserDTO;
 import com.tuorjp.financial_helper.exception.IncorrectEmailOrPasswordException;
 import com.tuorjp.financial_helper.security.JwtUtil;
@@ -34,6 +35,8 @@ public class AuthController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-        return ResponseEntity.ok(jwt);
+        AuthenticationDTO authenticationResponse = new AuthenticationDTO(jwt, userDetails.getUsername());
+
+        return ResponseEntity.ok(authenticationResponse);
     }
 }
