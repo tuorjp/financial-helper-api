@@ -2,7 +2,7 @@ package com.tuorjp.financial_helper.config;
 
 import com.tuorjp.financial_helper.security.JwtRequestFilter;
 import com.tuorjp.financial_helper.services.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,12 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,8 +38,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v1/authenticate", "/v1/user")
-                        .permitAll()
+                        .requestMatchers("/v1/authenticate", "/v1/user").permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session

@@ -25,7 +25,12 @@ public class PaymentService {
     }
 
     public List<PaymentDTO> findPaymentsWithinDates(LocalDate startDate, LocalDate endDate) {
-        List<Payment> payments = paymentRepository.findByDateBetween(startDate, endDate, userService.getCurrentUser());
+        List<Payment> payments = paymentRepository
+                .findByDateBetween(
+                        startDate,
+                        endDate,
+                        userService.getCurrentUser()
+                );
 
         return payments
                 .stream()
@@ -46,7 +51,12 @@ public class PaymentService {
     public List<PaymentDTO> findPaymentBetweenValues(float startValue, float endValue) {
         List<Payment> payments;
 
-        payments = paymentRepository.findByPaymentValueBetween(startValue, endValue, userService.getCurrentUser());
+        payments = paymentRepository
+                .findByPaymentValueBetween(
+                        startValue,
+                        endValue,
+                        userService.getCurrentUser()
+                );
 
         return payments
                 .stream()

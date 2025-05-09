@@ -23,7 +23,12 @@ public class ReceiptService {
     }
 
     public List<ReceiptDTO> findReceiptsWithinDates(LocalDate startDate, LocalDate endDate) {
-        List<Receipt> receipts = receiptRepository.findByDateBetween(startDate, endDate, userService.getCurrentUser());
+        List<Receipt> receipts = receiptRepository
+                .findByDateBetween(
+                        startDate,
+                        endDate,
+                        userService.getCurrentUser()
+                );
 
         return receipts.stream()
                 .map(this::convertToDTO)
@@ -39,7 +44,12 @@ public class ReceiptService {
     }
 
     public List<ReceiptDTO> findReceiptsBetweenValues(float startValue, float endValue) {
-        List<Receipt> receipts = receiptRepository.findByPaymentValueBetween(startValue, endValue, userService.getCurrentUser());
+        List<Receipt> receipts = receiptRepository
+                .findByPaymentValueBetween(
+                        startValue,
+                        endValue,
+                        userService.getCurrentUser()
+                );
 
         return receipts.stream()
                 .map(this::convertToDTO)
