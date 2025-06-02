@@ -9,12 +9,12 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
-@Entity
+//Tem que ter esse nome por que o Postgres já tem uma tabela padrão user e dá erro se não renomear
+@Entity(name = "users")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
