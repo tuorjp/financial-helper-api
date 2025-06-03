@@ -1,6 +1,6 @@
 package com.tuorjp.financial_helper.config;
 
-import com.tuorjp.financial_helper.security.JwtRequestFilter;
+import com.tuorjp.financial_helper.security.SecurityFilter;
 import com.tuorjp.financial_helper.services.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtRequestFilter jwtRequestFilter;
+    private final SecurityFilter jwtRequestFilter;
     private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
