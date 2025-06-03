@@ -49,7 +49,7 @@ public class UserService {
 
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("User from authentication: " + authentication.getPrincipal());
+        log.info("User from authentication: {}", authentication.getPrincipal());
 
         Object principal = authentication.getPrincipal();
 
@@ -58,14 +58,14 @@ public class UserService {
 
             User userRetrieved = userRepository.findByEmail(username);
             if (userRetrieved != null) {
-                log.info("User retrieved: " + userRetrieved.getId());
+                log.info("User retrieved: {}", userRetrieved.getId());
                 return userRetrieved;
             } else {
-                log.warn("No user found with username: " + username);
+                log.warn("No user found with username: {}", username);
                 throw new UsernameNotFoundException("User not found");
             }
         } else {
-            log.error("Unexpected principal type: " + principal.getClass());
+            log.error("Unexpected principal type: {}", principal.getClass());
             throw new IllegalArgumentException("Unexpected principal type");
         }
     }
