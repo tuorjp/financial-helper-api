@@ -1,6 +1,7 @@
 package com.tuorjp.financial_helper.services;
 
 import com.tuorjp.financial_helper.dto.ReceiptDTO;
+import com.tuorjp.financial_helper.models.Category;
 import com.tuorjp.financial_helper.models.Receipt;
 import com.tuorjp.financial_helper.repositories.ReceiptRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +36,8 @@ public class ReceiptService {
                 .collect(Collectors.toList());
     }
 
-    public List<ReceiptDTO> findReceiptsByCategory(int categoryId) {
-        List<Receipt> receipts = receiptRepository.findByCategory(categoryId, userService.getCurrentUser());
+    public List<ReceiptDTO> findReceiptsByCategory(Category category) {
+        List<Receipt> receipts = receiptRepository.findByCategory(category, userService.getCurrentUser());
 
         return receipts.stream()
                 .map(this::convertToDTO)
@@ -45,7 +46,7 @@ public class ReceiptService {
 
     public List<ReceiptDTO> findReceiptsBetweenValues(float startValue, float endValue) {
         List<Receipt> receipts = receiptRepository
-                .findByPaymentValueBetween(
+                .findByReceiptValueBetween(
                         startValue,
                         endValue,
                         userService.getCurrentUser()
