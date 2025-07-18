@@ -5,12 +5,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
-    public User mapToUser(UserDTO dto) {
-        return User
-                .builder()
-                .email(dto.getEmail())
-                .name(dto.getName())
-                .password(dto.getPassword())
-                .build();
-    }
+  public User mapToUser(UserDTO dto) {
+    return User
+        .builder()
+        .email(dto.getEmail())
+        .name(dto.getName())
+        .password(dto.getPassword())
+        .build();
+  }
 }

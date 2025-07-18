@@ -14,24 +14,24 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class CategoryController {
-    private final CategoryService categoryService;
-    private final CategoryMapper categoryMapper;
+  private final CategoryService categoryService;
+  private final CategoryMapper categoryMapper;
 
-    @PostMapping("/v1/category")
-    public ResponseEntity<String> createCategory(@RequestBody CategoryDTO categoryDTO) {
-        categoryService.createCategory(categoryMapper.mapToCategory(categoryDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+  @PostMapping("/v1/category")
+  public ResponseEntity<String> createCategory(@RequestBody CategoryDTO categoryDTO) {
+    categoryService.createCategory(categoryMapper.mapToCategory(categoryDTO));
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
 
-    @GetMapping("/v1/category")
-    public ResponseEntity<?> getAllCategories() {
-        List<Category> categories = categoryService.findAllCategories();
-        return ResponseEntity.ok(categories);
-    }
+  @GetMapping("/v1/category")
+  public ResponseEntity<?> getAllCategories() {
+    List<Category> categories = categoryService.findAllCategories();
+    return ResponseEntity.ok(categories);
+  }
 
-    @GetMapping("/v1/category/{type}")
-    public ResponseEntity<?> getCategoriesByType(@PathVariable String type) {
-        List<Category> categories = categoryService.findByType(Integer.parseInt(type));
-        return ResponseEntity.ok(categories);
-    }
+  @GetMapping("/v1/category/{type}")
+  public ResponseEntity<?> getCategoriesByType(@PathVariable String type) {
+    List<Category> categories = categoryService.findByType(Integer.parseInt(type));
+    return ResponseEntity.ok(categories);
+  }
 }

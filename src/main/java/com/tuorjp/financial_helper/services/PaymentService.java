@@ -16,60 +16,60 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class PaymentService {
-    private final PaymentRepository paymentRepository;
-    private final UserService userService;
-    private final CategoryService categoryService;
+  private final PaymentRepository paymentRepository;
+  private final UserService userService;
+  private final CategoryService categoryService;
 
-    public Payment createPayment(Payment payment) {
-        return paymentRepository.save(payment);
-    }
+  public Payment createPayment(Payment payment) {
+    return paymentRepository.save(payment);
+  }
 
-    public List<PaymentDTO> findPaymentsWithinDates(LocalDate startDate, LocalDate endDate) {
-        List<Payment> payments = paymentRepository
-                .findByDateBetween(
-                        startDate,
-                        endDate,
-                        userService.getCurrentUser()
-                );
+  public List<PaymentDTO> findPaymentsWithinDates(LocalDate startDate, LocalDate endDate) {
+    List<Payment> payments = paymentRepository
+        .findByDateBetween(
+            startDate,
+            endDate,
+            userService.getCurrentUser()
+        );
 
-        return payments
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+    return payments
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
 
-    public List<PaymentDTO> findPaymentsByCategory(int paymentCategory) {
-        Category category = categoryService.findById(paymentCategory);
-        List<Payment> payments = paymentRepository.findByCategory(category, userService.getCurrentUser());
+  public List<PaymentDTO> findPaymentsByCategory(int paymentCategory) {
+    Category category = categoryService.findById(paymentCategory);
+    List<Payment> payments = paymentRepository.findByCategory(category, userService.getCurrentUser());
 
-        return payments
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+    return payments
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
 
-    public List<PaymentDTO> findPaymentBetweenValues(float startValue, float endValue) {
-        List<Payment> payments;
+  public List<PaymentDTO> findPaymentBetweenValues(float startValue, float endValue) {
+    List<Payment> payments;
 
-        payments = paymentRepository
-                .findByPaymentValueBetween(
-                        startValue,
-                        endValue,
-                        userService.getCurrentUser()
-                );
+    payments = paymentRepository
+        .findByPaymentValueBetween(
+            startValue,
+            endValue,
+            userService.getCurrentUser()
+        );
 
-        return payments
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+    return payments
+        .stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
 
-    private PaymentDTO convertToDTO(Payment payment) {
-        PaymentDTO dto = new PaymentDTO();
-        dto.setPaymentDate(payment.getPaymentDate());
-        dto.setPaymentValue(payment.getPaymentValue());
-        dto.setCategory(payment.getCategory().getId());
-        dto.setUser(payment.getUser().getId());
-        return dto;
-    }
+  private PaymentDTO convertToDTO(Payment payment) {
+    PaymentDTO dto = new PaymentDTO();
+    dto.setPaymentDate(payment.getPaymentDate());
+    dto.setPaymentValue(payment.getPaymentValue());
+    dto.setCategory(payment.getCategory().getId());
+    dto.setUser(payment.getUser().getId());
+    return dto;
+  }
 }

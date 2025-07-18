@@ -14,21 +14,21 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class Receipt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    @Column(name = "receipt_date", nullable = false)
-    private LocalDate receiptDate;
+  @Column(name = "receipt_date", nullable = false)
+  private LocalDate receiptDate;
 
-    @Column(name = "receipt_value", nullable = false)
-    private float receiptValue;
+  @Column(name = "receipt_value", nullable = false)
+  private float receiptValue;
 
-    @ManyToOne
-    @JoinColumn(name = "receipt_category", nullable = false)
-    private Category category;
+  @ManyToOne
+  @JoinColumn(name = "receipt_category", nullable = false)
+  private Category category;
 }

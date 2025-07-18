@@ -16,53 +16,53 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ReceiptService {
-    private final ReceiptRepository receiptRepository;
-    private final UserService userService;
+  private final ReceiptRepository receiptRepository;
+  private final UserService userService;
 
-    public Receipt createReceipt(Receipt receipt) {
-        return receiptRepository.save(receipt);
-    }
+  public Receipt createReceipt(Receipt receipt) {
+    return receiptRepository.save(receipt);
+  }
 
-    public List<ReceiptDTO> findReceiptsWithinDates(LocalDate startDate, LocalDate endDate) {
-        List<Receipt> receipts = receiptRepository
-                .findByDateBetween(
-                        startDate,
-                        endDate,
-                        userService.getCurrentUser()
-                );
+  public List<ReceiptDTO> findReceiptsWithinDates(LocalDate startDate, LocalDate endDate) {
+    List<Receipt> receipts = receiptRepository
+        .findByDateBetween(
+            startDate,
+            endDate,
+            userService.getCurrentUser()
+        );
 
-        return receipts.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+    return receipts.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
 
-    public List<ReceiptDTO> findReceiptsByCategory(Category category) {
-        List<Receipt> receipts = receiptRepository.findByCategory(category, userService.getCurrentUser());
+  public List<ReceiptDTO> findReceiptsByCategory(Category category) {
+    List<Receipt> receipts = receiptRepository.findByCategory(category, userService.getCurrentUser());
 
-        return receipts.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+    return receipts.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
 
-    public List<ReceiptDTO> findReceiptsBetweenValues(float startValue, float endValue) {
-        List<Receipt> receipts = receiptRepository
-                .findByReceiptValueBetween(
-                        startValue,
-                        endValue,
-                        userService.getCurrentUser()
-                );
+  public List<ReceiptDTO> findReceiptsBetweenValues(float startValue, float endValue) {
+    List<Receipt> receipts = receiptRepository
+        .findByReceiptValueBetween(
+            startValue,
+            endValue,
+            userService.getCurrentUser()
+        );
 
-        return receipts.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+    return receipts.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
 
-    private ReceiptDTO convertToDTO(Receipt receipt) {
-        ReceiptDTO dto = new ReceiptDTO();
-        dto.setReceiptDate(receipt.getReceiptDate());
-        dto.setReceiptValue(receipt.getReceiptValue());
-        dto.setCategory(receipt.getCategory().getId());
-        dto.setUser(receipt.getUser().getId());
-        return dto;
-    }
+  private ReceiptDTO convertToDTO(Receipt receipt) {
+    ReceiptDTO dto = new ReceiptDTO();
+    dto.setReceiptDate(receipt.getReceiptDate());
+    dto.setReceiptValue(receipt.getReceiptValue());
+    dto.setCategory(receipt.getCategory().getId());
+    dto.setUser(receipt.getUser().getId());
+    return dto;
+  }
 }

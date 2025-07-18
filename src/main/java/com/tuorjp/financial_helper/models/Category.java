@@ -11,22 +11,22 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private int id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @EqualsAndHashCode.Include
+  private int id;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @Column(nullable = false)
-    private Integer type;
+  @Column(nullable = false)
+  private Integer type;
 
-    @PrePersist
-    @PreUpdate
-    private void validateType() {
-        if(!CategoryType.isValidType(this.type)) {
-            throw new IllegalArgumentException("Invalid category type " + this.type);
-        }
+  @PrePersist
+  @PreUpdate
+  private void validateType() {
+    if (!CategoryType.isValidType(this.type)) {
+      throw new IllegalArgumentException("Invalid category type " + this.type);
     }
+  }
 }

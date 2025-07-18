@@ -16,52 +16,52 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-    @Autowired
-    private CategoryRepository categoryRepository;
+  @Autowired
+  private CategoryRepository categoryRepository;
 
-    public Category findByName(String name) {
-        Optional<Category> category = categoryRepository.findByName(name);
-        if (category.isEmpty()) {
-            throw new CategoryNotFoundException(name);
-        }
-
-        return category.get();
+  public Category findByName(String name) {
+    Optional<Category> category = categoryRepository.findByName(name);
+    if (category.isEmpty()) {
+      throw new CategoryNotFoundException(name);
     }
 
-    public Category createCategory(Category category) {
-        if (!CategoryType.isValidType(category.getType())) {
-            throw new InvalidCategoryTypeException("Invalid category type " + category.getType());
-        }
+    return category.get();
+  }
 
-        var existentCategory = categoryRepository.findByName(category.getName());
-
-        if (existentCategory.isPresent()) {
-            throw new DuplicatedTupleException("Category already exists");
-        }
-
-        return categoryRepository.save(category);
+  public Category createCategory(Category category) {
+    if (!CategoryType.isValidType(category.getType())) {
+      throw new InvalidCategoryTypeException("Invalid category type " + category.getType());
     }
 
-    public List<Category> findByType(Integer type) {
-        if (!CategoryType.isValidType(type)) {
-            throw new InvalidCategoryTypeException("Invalid category type " + type);
-        }
-        Optional<List<Category>> categoryList = categoryRepository.findByType(type);
+    var existentCategory = categoryRepository.findByName(category.getName());
 
-        if (categoryList.isEmpty()) {
-            throw new CategoryNotFoundException("Categories not found for type " + type);
-        }
-
-        return categoryList.get();
+    if (existentCategory.isPresent()) {
+      throw new DuplicatedTupleException("Category already exists");
     }
 
-    public Category findById(int id) {
-        return categoryRepository
-                .findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
+    return categoryRepository.save(category);
+  }
+
+  public List<Category> findByType(Integer type) {
+    if (!CategoryType.isValidType(type)) {
+      throw new InvalidCategoryTypeException("Invalid category type " + type);
+    }
+    Optional<List<Category>> categoryList = categoryRepository.findByType(type);
+
+    if (categoryList.isEmpty()) {
+      throw new CategoryNotFoundException("Categories not found for type " + type);
     }
 
-    public List<Category> findAllCategories() {
-        return categoryRepository.findAll();
-    }
+    return categoryList.get();
+  }
+
+  public Category findById(int id) {
+    return categoryRepository
+        .findById(id)
+        .orElseThrow(() -> new CategoryNotFoundException(id));
+  }
+
+  public List<Category> findAllCategories() {
+    return categoryRepository.findAll();
+  }
 }

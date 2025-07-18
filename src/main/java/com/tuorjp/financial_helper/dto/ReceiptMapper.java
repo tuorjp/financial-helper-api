@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ReceiptMapper {
-    public Receipt mapToReceipt(ReceiptDTO dto, User user, Category category) {
-        return Receipt.builder()
-                .receiptValue(dto.getReceiptValue())
-                .receiptDate(dto.getReceiptDate())
-                .user(user)
-                .category(category)
-                .build();
-    }
+  public Receipt mapToReceipt(ReceiptDTO dto, User user, Category category) {
+    return Receipt.builder()
+        .receiptValue(dto.getReceiptValue())
+        .receiptDate(dto.getReceiptDate())
+        .user(user)
+        .category(category)
+        .build();
+  }
 }

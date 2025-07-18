@@ -18,55 +18,55 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    public Optional<User> findById(Integer id) {
-        return userRepository.findById(id);
+  public Optional<User> findById(Integer id) {
+    return userRepository.findById(id);
+  }
+
+  public User createUser(User user) {
+    var existentUser = userRepository.findByEmail(user.getEmail());
+
+    if (existentUser != null) {
+      throw new DuplicatedTupleException("User already exists");
     }
 
-    public User createUser(User user) {
-        var existentUser = userRepository.findByEmail(user.getEmail());
+    encodePassword(user);
+    return userRepository.save(user);
+  }
 
-        if(existentUser != null) {
-            throw new DuplicatedTupleException("User already exists");
-        }
+  public void encodePassword(User user) {
+    String rawPassword = user.getPassword();
+    String encryptedPassword = passwordEncoder.encode(rawPassword);
+    user.setPassword(encryptedPassword);
+  }
 
-        encodePassword(user);
-        return userRepository.save(user);
+  public User findById(int id) {
+    return userRepository.findById(id)
+        .orElseThrow(() -> new NoSuchElementException("User not found with ID " + id));
+  }
+
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    log.info("User from authentication: {}", authentication.getPrincipal());
+
+    Object principal = authentication.getPrincipal();
+
+    if (principal instanceof org.springframework.security.core.userdetails.User springUser) {
+      String username = springUser.getUsername();
+
+      User userRetrieved = userRepository.findByEmail(username);
+      if (userRetrieved != null) {
+        log.info("User retrieved: {}", userRetrieved.getId());
+        return userRetrieved;
+      } else {
+        log.warn("No user found with username: {}", username);
+        throw new UsernameNotFoundException("User not found");
+      }
+    } else {
+      log.error("Unexpected principal type: {}", principal.getClass());
+      throw new IllegalArgumentException("Unexpected principal type");
     }
-
-    public void encodePassword(User user) {
-        String rawPassword = user.getPassword();
-        String encryptedPassword = passwordEncoder.encode(rawPassword);
-        user.setPassword(encryptedPassword);
-    }
-
-    public User findById(int id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found with ID " + id));
-    }
-
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("User from authentication: {}", authentication.getPrincipal());
-
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof org.springframework.security.core.userdetails.User springUser) {
-            String username = springUser.getUsername();
-
-            User userRetrieved = userRepository.findByEmail(username);
-            if (userRetrieved != null) {
-                log.info("User retrieved: {}", userRetrieved.getId());
-                return userRetrieved;
-            } else {
-                log.warn("No user found with username: {}", username);
-                throw new UsernameNotFoundException("User not found");
-            }
-        } else {
-            log.error("Unexpected principal type: {}", principal.getClass());
-            throw new IllegalArgumentException("Unexpected principal type");
-        }
-    }
+  }
 }

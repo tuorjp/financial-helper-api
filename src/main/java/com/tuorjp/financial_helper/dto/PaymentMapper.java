@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentMapper {
-    public Payment mapToPayment(PaymentDTO dto, User user, Category category) {
-        return Payment.builder()
-                .paymentDate(dto.getPaymentDate())
-                .paymentValue(dto.getPaymentValue())
-                .user(user)
-                .category(category)
-                .build();
-    }
+  public Payment mapToPayment(PaymentDTO dto, User user, Category category) {
+    return Payment.builder()
+        .paymentDate(dto.getPaymentDate())
+        .paymentValue(dto.getPaymentValue())
+        .user(user)
+        .category(category)
+        .build();
+  }
 }

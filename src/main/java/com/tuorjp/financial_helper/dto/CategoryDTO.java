@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CategoryDTO {
-    private String name;
-    private Integer type;
+  private String name;
+  private Integer type;
 }

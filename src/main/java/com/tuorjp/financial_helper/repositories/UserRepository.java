@@ -4,6 +4,7 @@ import com.tuorjp.financial_helper.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    User findByEmail(String email);
-    User save(User user);
+  User findByEmail(String email);
+
+  User save(User user);
 }

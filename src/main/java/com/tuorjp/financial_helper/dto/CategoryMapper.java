@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMapper {
-    public Category mapToCategory(CategoryDTO dto) {
-        return Category
-                .builder()
-                .name(dto.getName())
-                .type(dto.getType())
-                .build();
-    }
+  public Category mapToCategory(CategoryDTO dto) {
+    return Category
+        .builder()
+        .name(dto.getName())
+        .type(dto.getType())
+        .build();
+  }
 }

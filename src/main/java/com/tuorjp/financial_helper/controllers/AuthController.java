@@ -18,25 +18,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
+  private final AuthenticationManager authenticationManager;
+  private final JwtUtil jwtUtil;
+  private final UserDetailsService userDetailsService;
 
-    @PostMapping("/v1/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDTO dto){
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
-            );
-        } catch (AuthenticationException e) {
-            throw new IncorrectEmailOrPasswordException("Incorrect email or password.");
-        }
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-
-        AuthenticationDTO authenticationResponse = new AuthenticationDTO(jwt, userDetails.getUsername());
-
-        return ResponseEntity.ok(authenticationResponse);
+  @PostMapping("/v1/authenticate")
+  public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDTO dto) {
+    try {
+      authenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
+      );
+    } catch (AuthenticationException e) {
+      throw new IncorrectEmailOrPasswordException("Incorrect email or password.");
     }
+
+    final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail());
+    final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+
+    AuthenticationDTO authenticationResponse = new AuthenticationDTO(jwt, userDetails.getUsername());
+
+    return ResponseEntity.ok(authenticationResponse);
+  }
 }
