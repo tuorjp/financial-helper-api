@@ -2,6 +2,8 @@ package com.tuorjp.financial_helper.controllers;
 
 import com.tuorjp.financial_helper.dto.PaymentDTO;
 import com.tuorjp.financial_helper.dto.PaymentMapper;
+import com.tuorjp.financial_helper.exception.InvalidDateArgumentException;
+import com.tuorjp.financial_helper.exception.InvalidMonetaryValueException;
 import com.tuorjp.financial_helper.models.Category;
 import com.tuorjp.financial_helper.models.Payment;
 import com.tuorjp.financial_helper.models.User;
@@ -29,24 +31,16 @@ public class PaymentController {
 
   @PostMapping("/v1/payment")
   public ResponseEntity<?> createPayment(@RequestBody PaymentDTO dto) {
-    try {
+    Category category = categoryService.findById(dto.getCategory());
+    User user = userService.findById(dto.getUser());
+    Payment payment = paymentMapper.mapToPayment(dto, user, category);
+    Payment createdPayment = paymentService.createPayment(payment);
 
-      Category category = categoryService.findById(dto.getCategory());
-      User user = userService.findById(dto.getUser());
-      Payment payment = paymentMapper.mapToPayment(dto, user, category);
-      Payment createdPayment = paymentService.createPayment(payment);
+    Map<String, Object> response = new HashMap<>();
+    response.put("paymentDate", createdPayment.getPaymentDate());
+    response.put("paymentValue", createdPayment.getPaymentValue());
 
-      Map<String, Object> response = new HashMap<>();
-      response.put("paymentDate", createdPayment.getPaymentDate());
-      response.put("paymentValue", createdPayment.getPaymentValue());
-
-      return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
-    } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().body("Argument invalid: " + e.getMessage());
-    } catch (NoSuchElementException e) {
-      return ResponseEntity.badRequest().body("Resource not found: " + e.getMessage());
-    }
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   @GetMapping("/v1/payment")
@@ -54,17 +48,9 @@ public class PaymentController {
       @RequestParam(name = "init-value") Float initValue,
       @RequestParam(name = "end-value") Float endValue
   ) {
-    if (initValue == null || endValue == null) {
-      return ResponseEntity.badRequest().body("init-value and end-value cannot be null or empty.");
-    }
-
     List<PaymentDTO> payments;
-    try {
-      payments = paymentService.findPaymentBetweenValues(initValue, endValue);
-      return ResponseEntity.ok(payments);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving payments: " + e.getMessage());
-    }
+    payments = paymentService.findPaymentBetweenValues(initValue, endValue);
+    return ResponseEntity.ok(payments);
   }
 
   @GetMapping("/v1/payment-by-date")
@@ -72,16 +58,8 @@ public class PaymentController {
       @RequestParam(name = "init-date") LocalDate initDate,
       @RequestParam(name = "end-date") LocalDate endDate
   ) {
-    if (initDate == null || endDate == null) {
-      return ResponseEntity.badRequest().body("init-date and end-date cannot be null or empty.");
-    }
-
     List<PaymentDTO> payments;
-    try {
       payments = paymentService.findPaymentsWithinDates(initDate, endDate);
       return ResponseEntity.ok(payments);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while retrieving payments: " + e.getMessage());
-    }
   }
 }

@@ -1,6 +1,8 @@
 package com.tuorjp.financial_helper.services;
 
 import com.tuorjp.financial_helper.dto.PaymentDTO;
+import com.tuorjp.financial_helper.exception.InvalidDateArgumentException;
+import com.tuorjp.financial_helper.exception.InvalidMonetaryValueException;
 import com.tuorjp.financial_helper.models.Category;
 import com.tuorjp.financial_helper.models.Payment;
 import com.tuorjp.financial_helper.repositories.PaymentRepository;
@@ -25,6 +27,10 @@ public class PaymentService {
   }
 
   public List<PaymentDTO> findPaymentsWithinDates(LocalDate startDate, LocalDate endDate) {
+    if (startDate == null || endDate == null) {
+      throw new InvalidDateArgumentException();
+    }
+
     List<Payment> payments = paymentRepository
         .findByDateBetween(
             startDate,
@@ -48,8 +54,12 @@ public class PaymentService {
         .collect(Collectors.toList());
   }
 
-  public List<PaymentDTO> findPaymentBetweenValues(float startValue, float endValue) {
+  public List<PaymentDTO> findPaymentBetweenValues(Float startValue, Float endValue) {
     List<Payment> payments;
+
+    if (startValue == null || endValue == null || startValue < 0 || endValue < 0) {
+      throw new InvalidMonetaryValueException();
+    }
 
     payments = paymentRepository
         .findByPaymentValueBetween(

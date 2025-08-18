@@ -1,9 +1,6 @@
 package com.tuorjp.financial_helper.controllers.exceptions;
 
-import com.tuorjp.financial_helper.exception.CategoryNotFoundException;
-import com.tuorjp.financial_helper.exception.DuplicatedTupleException;
-import com.tuorjp.financial_helper.exception.IncorrectEmailOrPasswordException;
-import com.tuorjp.financial_helper.exception.InvalidCategoryTypeException;
+import com.tuorjp.financial_helper.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +25,16 @@ public class ControllerExceptionHandler {
 
   @ExceptionHandler(IncorrectEmailOrPasswordException.class)
   public ResponseEntity<String> handleIncorrectEmailOrPasswordException(IncorrectEmailOrPasswordException e) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+  }
+
+  @ExceptionHandler(InvalidDateArgumentException.class)
+  public ResponseEntity<String> handleInvalidDateArgument(InvalidDateArgumentException e) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+  }
+
+  @ExceptionHandler(InvalidMonetaryValueException.class)
+  public ResponseEntity<String> handleInvalidMonetaryValueException(InvalidMonetaryValueException e) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
   }
 }
