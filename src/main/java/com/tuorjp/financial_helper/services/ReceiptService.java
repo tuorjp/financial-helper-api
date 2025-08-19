@@ -1,11 +1,14 @@
 package com.tuorjp.financial_helper.services;
 
 import com.tuorjp.financial_helper.dto.ReceiptDTO;
+import com.tuorjp.financial_helper.exception.InvalidDateArgumentException;
+import com.tuorjp.financial_helper.exception.InvalidMonetaryValueException;
 import com.tuorjp.financial_helper.models.Category;
 import com.tuorjp.financial_helper.models.Receipt;
 import com.tuorjp.financial_helper.repositories.ReceiptRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +27,10 @@ public class ReceiptService {
   }
 
   public List<ReceiptDTO> findReceiptsWithinDates(LocalDate startDate, LocalDate endDate) {
+    if (startDate == null || endDate == null) {
+      throw new InvalidDateArgumentException();
+    }
+
     List<Receipt> receipts = receiptRepository
         .findByDateBetween(
             startDate,
@@ -44,7 +51,11 @@ public class ReceiptService {
         .collect(Collectors.toList());
   }
 
-  public List<ReceiptDTO> findReceiptsBetweenValues(float startValue, float endValue) {
+  public List<ReceiptDTO> findReceiptsBetweenValues(Float startValue, Float endValue) {
+    if (startValue == null || endValue == null) {
+      throw new InvalidMonetaryValueException();
+    }
+
     List<Receipt> receipts = receiptRepository
         .findByReceiptValueBetween(
             startValue,
