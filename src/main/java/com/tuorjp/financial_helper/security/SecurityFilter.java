@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -23,6 +25,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    String path = request.getRequestURI();
+    List<String> publicRoutes = Arrays.asList("/v1/authenticate", "/v1/user");
+    if (publicRoutes.contains(path)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     final String authorizationHeader = request.getHeader("Authorization");
 
     String userEmail = null;
@@ -30,7 +39,12 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
       jwt = authorizationHeader.substring(7);
-      userEmail = jwtUtil.extractUsername(jwt);
+      try {
+        userEmail = jwtUtil.extractUsername(jwt);
+        System.out.println("TOKEN RECEBIDO PARA O USUÁRIO: " + userEmail);
+      } catch (Exception e) {
+        System.err.println("ERRO AO EXTRAIR USERNAME DO TOKEN: " + e.getMessage());
+      }
     }
 
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
