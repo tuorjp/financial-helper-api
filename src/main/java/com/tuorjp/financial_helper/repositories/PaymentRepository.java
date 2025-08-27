@@ -13,6 +13,19 @@ import java.util.List;
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
   Payment save(Payment payment);
 
+  long countByUser(User user);
+
+  @Query("""
+        SELECT COUNT(p) FROM Payment p
+        WHERE p.user = :user
+        AND p.paymentDate BETWEEN :startDate AND :endDate
+    """)
+  long countByUserAndPaymentDateBetween(
+          @Param("user") User user,
+          @Param("startDate") LocalDate startDate,
+          @Param("endDate") LocalDate endDate
+  );
+
   @Query("""
           SELECT p FROM Payment p
           WHERE p.paymentDate BETWEEN :startDate AND :endDate

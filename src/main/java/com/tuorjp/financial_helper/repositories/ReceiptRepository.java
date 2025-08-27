@@ -13,6 +13,19 @@ import java.util.List;
 public interface ReceiptRepository extends JpaRepository<Receipt, Integer> {
   Receipt save(Receipt receipt);
 
+  long countByUser(User user);
+
+  @Query("""
+        SELECT COUNT(r) FROM Receipt r
+        WHERE r.user = :user
+        AND r.receiptDate BETWEEN :startDate AND :endDate
+    """)
+  long countByUserAndReceiptDateBetween(
+          @Param("user") User user,
+          @Param("startDate") LocalDate startDate,
+          @Param("endDate") LocalDate endDate
+  );
+
   @Query("""
           SELECT r
           FROM Receipt r
